@@ -4,11 +4,13 @@ import sys
 
 # Các lớp đại diện cho các thực thể trong lịch học
 class CourseClass:
-    def __init__(self, id, name, duration, requires_lab):
+    def __init__(self, id, name, duration, requires_lab, teacher):
         self.id = id
         self.name = name
         self.duration = duration
         self.requires_lab = requires_lab
+        self.teacher = teacher
+
 
 class Room:
     def __init__(self, id, name, seats, is_lab):
@@ -137,18 +139,45 @@ class ScheduleApp(QMainWindow):
         self.rooms = [
             Room(1, "Room 1", seats=30, is_lab=False),
             Room(2, "Room 2", seats=25, is_lab=True)
+           
         ]
 
         self.courses = [
-            CourseClass(1, "Math 101 - Class A", duration=2, requires_lab=False),
-            CourseClass(2, "Physics 101 - Class A", duration=2, requires_lab=True),
-            CourseClass(3, "Chemistry 101 - Class A", duration=2, requires_lab=True),
-            CourseClass(4, "History 101 - Class A", duration=1, requires_lab=False),
-            CourseClass(5, "Math 101 - Class B", duration=2, requires_lab=False),
-            CourseClass(6, "Computer Science 101 - Class B", duration=2, requires_lab=True),
-            CourseClass(7, "English 101 - Class B", duration=1, requires_lab=False),
-            CourseClass(8, "Biology 101 - Class B", duration=2, requires_lab=True)
-        ]
+    CourseClass(1, "Math 101 - Class A", duration=2, requires_lab=False, teacher="Mr. Smith"),
+    CourseClass(2, "Physics 101 - Class A", duration=2, requires_lab=True, teacher="Dr. Johnson"),
+    CourseClass(3, "Chemistry 101 - Class A", duration=2, requires_lab=True, teacher="Dr. Lee"),
+    CourseClass(4, "History 101 - Class A", duration=1, requires_lab=False, teacher="Ms. Brown"),
+    CourseClass(5, "Math 101 - Class B", duration=2, requires_lab=False, teacher="Mr. Smith"),
+    CourseClass(6, "Computer Science 101 - Class B", duration=2, requires_lab=True, teacher="Dr. Walker"),
+    CourseClass(7, "English 101 - Class B", duration=1, requires_lab=False, teacher="Ms. Green"),
+    CourseClass(8, "Biology 101 - Class B", duration=2, requires_lab=True, teacher="Dr. Adams"),
+    CourseClass(9, "Math 101 - Class C", duration=2, requires_lab=False, teacher="Mr. Smith"),
+    CourseClass(10, "Physics 101 - Class C", duration=2, requires_lab=True, teacher="Dr. Johnson"),
+    CourseClass(11, "Chemistry 101 - Class C", duration=2, requires_lab=True, teacher="Dr. Lee"),
+    CourseClass(12, "History 101 - Class C", duration=1, requires_lab=False, teacher="Ms. Brown"),
+    CourseClass(13, "Math 101 - Class D", duration=2, requires_lab=False, teacher="Mr. Smith"),
+    CourseClass(14, "Computer Science 101 - Class D", duration=2, requires_lab=True, teacher="Dr. Walker"),
+    CourseClass(15, "English 101 - Class D", duration=1, requires_lab=False, teacher="Ms. Green"),
+    CourseClass(16, "Biology 101 - Class D", duration=2, requires_lab=True, teacher="Dr. Adams"),
+    CourseClass(17, "Math 101 - Class E", duration=2, requires_lab=False, teacher="Mr. Smith"),
+    CourseClass(18, "Physics 101 - Class E", duration=2, requires_lab=True, teacher="Dr. Johnson"),
+    CourseClass(19, "Chemistry 101 - Class E", duration=2, requires_lab=True, teacher="Dr. Lee"),
+    CourseClass(20, "History 101 - Class E", duration=1, requires_lab=False, teacher="Ms. Brown"),
+    CourseClass(21, "Math 101 - Class F", duration=2, requires_lab=False, teacher="Mr. Smith"),
+    CourseClass(22, "Computer Science 101 - Class F", duration=2, requires_lab=True, teacher="Dr. Walker"),
+    CourseClass(23, "English 101 - Class F", duration=1, requires_lab=False, teacher="Ms. Green"),
+    CourseClass(24, "Biology 101 - Class F", duration=2, requires_lab=True, teacher="Dr. Adams"),
+    CourseClass(25, "Math 101 - Class G", duration=2, requires_lab=False, teacher="Mr. Smith"),
+    CourseClass(26, "Physics 101 - Class G", duration=2, requires_lab=True, teacher="Dr. Johnson"),
+    CourseClass(27, "Chemistry 101 - Class G", duration=2, requires_lab=True, teacher="Dr. Lee"),
+    CourseClass(28, "History 101 - Class G", duration=1, requires_lab=False, teacher="Ms. Brown"),
+    CourseClass(29, "Math 101 - Class H", duration=2, requires_lab=False, teacher="Mr. Smith"),
+    CourseClass(30, "Computer Science 101 - Class H", duration=2, requires_lab=True, teacher="Dr. Walker"),
+    CourseClass(31, "English 101 - Class H", duration=1, requires_lab=False, teacher="Ms. Green"),
+    CourseClass(32, "Biology 101 - Class H", duration=2, requires_lab=True, teacher="Dr. Adams")
+]
+
+
 
         self.init_ui()
 
@@ -190,19 +219,21 @@ class ScheduleApp(QMainWindow):
                 self.schedule_grid.addWidget(frame, row, col)
 
     def display_schedule(self, schedule):
+        # Thụt lề đúng cho phần thân hàm
         for i in range(1, 7):
             for j in range(1, 6):
                 frame = self.schedule_grid.itemAtPosition(i, j).widget()
                 if frame:
-                    frame.setText("")
+                    frame.setText("")  # Xóa nội dung trước khi hiển thị lịch mới
 
         for course, slot in schedule.classes.items():
             room_name = "Room 1" if not course.requires_lab else "Room 2"
-            day = (slot % 5) + 1
-            period = (slot // 5) + 1
+            day = (slot % 5) + 1  # Xác định ngày trong tuần
+            period = (slot // 5) + 1  # Xác định tiết học
             frame = self.schedule_grid.itemAtPosition(period, day).widget()
             if frame:
-                frame.setText(f"{course.name}\n({course.duration} periods)")
+                frame.setText(f"{course.name}\n{course.teacher}\n({course.duration} periods)")  # Hiển thị lịch học   
+
 
     def run_ga(self):
         self.generations = self.gen_spin.value()
